@@ -1,6 +1,5 @@
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { Appearance } from "react-native";
 
 import { Colors } from "@/constants/Colors";
@@ -32,11 +31,11 @@ export default function RootLayout() {
 				options={{ title: "Home", headerShown: false }}
 			/>
 			<Stack.Screen
-				name="Shop"
+				name="menu"
 				options={{
-					title: "Explore",
+					title: "Menu",
 					headerShown: true,
-					headerTitle: "Shop Screen",
+					headerTitle: "Menu Screen",
 				}}
 			/>
 

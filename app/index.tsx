@@ -1,11 +1,11 @@
+import { Link } from "expo-router";
 import {
-	View,
-	Text,
-	StyleSheet,
 	ImageBackground,
 	Pressable,
+	StyleSheet,
+	Text,
+	View,
 } from "react-native";
-import { Link } from "expo-router";
 
 import gundamImg from "@/assets/images/gundam.png";
 
@@ -18,7 +18,7 @@ const app = () => {
 				style={styles.image}
 			>
 				<Text style={styles.text}>Gundam Shop</Text>
-				<Link href="/explore" style={{ marginHorizontal: "auto" }} asChild>
+				<Link href="/menu" style={{ marginHorizontal: "auto" }} asChild>
 					<Pressable style={styles.button}>
 						<Text style={styles.buttonText}>Check items</Text>
 					</Pressable>
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
 		fontSize: 40,
 		fontWeight: "light",
 		textAlign: "center",
+		marginBottom: 20,
 	},
 	image: {
 		width: "100%",
