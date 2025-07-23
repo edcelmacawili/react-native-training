@@ -23,29 +23,11 @@ export default function RootLayout() {
 			screenOptions={{
 				headerStyle: { backgroundColor: theme.headerBackground },
 				headerTintColor: theme.text,
-				headerShadowVisible: false,
 			}}
 		>
 			<Stack.Screen
 				name="index"
 				options={{ title: "Home", headerShown: false }}
-			/>
-			<Stack.Screen
-				name="menu"
-				options={{
-					title: "Menu",
-					headerShown: true,
-					headerTitle: "Menu Screen",
-				}}
-			/>
-
-			<Stack.Screen
-				name="explore"
-				options={{
-					title: "Explore",
-					headerShown: true,
-					headerTitle: "Explore Screen",
-				}}
 			/>
 			<Stack.Screen name="+not-found" />
 		</Stack>

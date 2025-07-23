@@ -1,69 +1,149 @@
-import { Link } from "expo-router";
 import {
-	ImageBackground,
-	Pressable,
-	StyleSheet,
 	Text,
 	View,
+	TextInput,
+	Pressable,
+	StyleSheet,
+	FlatList,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-import gundamImg from "@/assets/images/gundam.png";
+import { data } from "@/data/backlog";
 
-const app = () => {
-	return (
-		<View style={styles.container}>
-			<ImageBackground
-				source={gundamImg}
-				resizeMode="cover"
-				style={styles.image}
-			>
-				<Text style={styles.text}>Gundam Shop</Text>
-				<Link href="/menu" style={{ marginHorizontal: "auto" }} asChild>
-					<Pressable style={styles.button}>
-						<Text style={styles.buttonText}>Check items</Text>
-					</Pressable>
-				</Link>
-			</ImageBackground>
+export default function Index() {
+	const [todos, setTodos] = useState(
+		data.sort((a: any, b: any) => b.id - a.id)
+	);
+	const [text, setText] = useState("");
+
+	const addTodo = () => {
+		if (text.trim()) {
+			const newId = todos.length > 0 ? todos[0].id + 1 : 1;
+			setTodos([{ id: newId, title: text, completed: false }, ...todos]);
+			setText("");
+		}
+	};
+
+	const toggleTodo = (id: number) => {
+		setTodos(
+			todos.map((todo: any) =>
+				todo.id === id ? { ...todo, completed: !todo.completed } : todo
+			)
+		);
+	};
+
+	const removeTodo = (id: number) => {
+		setTodos(todos.filter((todo: any) => todo.id !== id));
+	};
+
+	const renderItem = ({ item }: { item: any }) => (
+		<View style={styles.todoItem}>
+			<Pressable onPress={() => toggleTodo(item.id)}>
+				<View style={{ flex: 1, flexDirection: "column", gap: 4 }}>
+					<Text
+						style={[styles.todoText, item.completed && styles.completedText]}
+					>
+						{item.title}
+					</Text>
+					<Text
+						style={[styles.todoText, item.completed && styles.completedText]}
+					>
+						{item.description}
+					</Text>
+				</View>
+			</Pressable>
+			<Pressable onPress={() => removeTodo(item.id)}>
+				<MaterialCommunityIcons
+					name="delete-circle"
+					size={36}
+					color="red"
+					selectable={undefined}
+				/>
+			</Pressable>
 		</View>
 	);
-};
 
-export default app;
+	return (
+		<SafeAreaView style={styles.container}>
+			<View style={styles.inputContainer}>
+				<TextInput
+					style={styles.input}
+					placeholder="Add a new todo"
+					placeholderTextColor="gray"
+					value={text}
+					onChangeText={setText}
+				/>
+				<Pressable onPress={addTodo} style={styles.addButton}>
+					<Text style={styles.addButtonText}>Add</Text>
+				</Pressable>
+			</View>
+			<FlatList
+				data={todos}
+				renderItem={renderItem}
+				keyExtractor={(todo) => todo.id}
+				contentContainerStyle={{ flexGrow: 1 }}
+			/>
+		</SafeAreaView>
+	);
+}
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		flexDirection: "column",
-		justifyContent: "center",
+		backgroundColor: "black",
 	},
-	text: {
-		color: "white",
-		fontSize: 40,
-		fontWeight: "light",
-		textAlign: "center",
-		marginBottom: 20,
-	},
-	image: {
+	inputContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginBottom: 10,
+		padding: 10,
 		width: "100%",
-		height: "100%",
+		maxWidth: 1024,
+		marginHorizontal: "auto",
+		pointerEvents: "auto",
+	},
+	input: {
 		flex: 1,
-		resizeMode: "cover",
-		justifyContent: "center",
-	},
-	link: {
+		borderColor: "gray",
+		borderWidth: 1,
+		borderRadius: 5,
+		padding: 10,
+		marginRight: 10,
+		fontSize: 18,
+		minWidth: 0,
 		color: "white",
-		fontSize: 20,
-		textAlign: "center",
-		marginTop: 20,
 	},
-	button: {
-		borderRadius: 20,
-		backgroundColor: "rgba(255, 255, 255, 0.5)",
+	addButton: {
+		backgroundColor: "white",
+		borderRadius: 5,
+		padding: 10,
 	},
-	buttonText: {
+	addButtonText: {
+		fontSize: 18,
 		color: "black",
-		fontSize: 20,
-		textAlign: "center",
-		margin: 20,
+	},
+	todoItem: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		gap: 4,
+		padding: 10,
+		borderBottomColor: "gray",
+		borderBottomWidth: 1,
+		width: "100%",
+		maxWidth: 1024,
+		marginHorizontal: "auto",
+		pointerEvents: "auto",
+	},
+	todoText: {
+		flex: 1,
+		fontSize: 18,
+		color: "white",
+	},
+	completedText: {
+		textDecorationLine: "line-through",
+		color: "gray",
 	},
 });
